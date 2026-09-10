@@ -1,4 +1,5 @@
 ﻿using Core.Security.Extensions;
+using Domain.Entities;
 using MediatR;
 using Microsoft.AspNetCore.Mvc;
 
@@ -6,24 +7,59 @@ namespace WebAPI.Controllers;
 
 public class BaseController : ControllerBase
 {
-    protected IMediator? Mediator =>
-        _mediator ??= HttpContext.RequestServices.GetService<IMediator>();
+    protected IMediator Mediator =>
+        _mediator ??=
+            HttpContext.RequestServices.GetService<IMediator>()
+            ?? throw new InvalidOperationException(
+                "IMediator cannot be retrieved from request services."
+            );
+
     private IMediator? _mediator;
 
-    protected string? GetIpAddress()
+    protected string GetIpAddress()
     {
-        bool requestHasForwardedForHeader = Request.Headers.TryGetValue(
+        string ipAddress = Request.Headers.TryGetValue(
             "X-Forwarded-For",
             out Microsoft.Extensions.Primitives.StringValues value
-        );
-        if (requestHasForwardedForHeader)
-            return value;
-        return HttpContext.Connection.RemoteIpAddress?.MapToIPv4().ToString();
+        )
+            ? value.ToString()
+            : HttpContext.Connection.RemoteIpAddress?.MapToIPv4().ToString()
+                ?? throw new InvalidOperationException(
+                    "IP address cannot be retrieved from request."
+                );
+        return ipAddress;
     }
 
     protected int GetUserIdFromRequest()
     {
-        int userId = Convert.ToInt32(HttpContext.User.GetIdClaim());
-        return userId;
+        bool parsed = int.TryParse(HttpContext.User.GetIdClaim(), out int userId);
+        return parsed ? userId : 0;
+    }
+
+    protected ICollection<string> GetUserRolesFromRequest()
+    {
+        return HttpContext.User.GetRoleClaims() ?? Array.Empty<string>();
+    }
+
+    protected string GetRefreshTokenFromCookies()
+    {
+        return Request.Cookies["refreshToken"]
+            ?? throw new ArgumentException("Refresh token is not found in request cookies.");
+    }
+
+    protected void SetRefreshTokenToCookie(RefreshToken refreshToken)
+    {
+        CookieOptions cookieOptions = new()
+        {
+            Secure = true,
+            SameSite = SameSiteMode.Strict,
+            Expires = DateTime.UtcNow.AddDays(7),
+        };
+        Response.Cookies.Append(key: "refreshToken", refreshToken.Token, cookieOptions);
+    }
+
+    protected void DeleteRefreshTokenFromCookies()
+    {
+        Response.Cookies.Delete("refreshToken");
     }
 }
