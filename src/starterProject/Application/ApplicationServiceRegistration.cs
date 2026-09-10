@@ -1,4 +1,6 @@
 ﻿using System.Reflection;
+using Application.Services.AuthService;
+using Application.Services.UserService;
 using Core.Application.Pipelines.Authorization;
 using Core.Application.Pipelines.Caching;
 using Core.Application.Pipelines.Logging;
@@ -50,6 +52,9 @@ public static class ApplicationServiceRegistration
         services.AddSecurityServices<int, int, Guid>(tokenOptions);
 
         services.AddYamlResourceLocalization();
+
+        services.AddScoped<IAuthService, AuthManager>();
+        services.AddScoped<IUserService, UserManager>();
 
         return services;
     }

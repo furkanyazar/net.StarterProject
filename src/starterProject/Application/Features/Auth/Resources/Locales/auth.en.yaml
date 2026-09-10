@@ -1,0 +1,5 @@
+EmailOrPasswordIncorrect: "Email or password is incorrect."
+EmailAlreadyExists: "Email already exists."
+RefreshTokenDoesNotExist: "Refresh token does not exist."
+RefreshTokenDoesNotActive: "Refresh token does not active."
+UserDoesNotExist: "User does not exist."

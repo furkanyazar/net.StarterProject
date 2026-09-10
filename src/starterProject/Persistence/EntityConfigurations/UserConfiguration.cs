@@ -15,10 +15,7 @@ public class UserConfiguration : IEntityTypeConfiguration<User>
         builder.Property(u => u.Email).HasColumnName("Email").IsRequired();
         builder.Property(u => u.PasswordSalt).HasColumnName("PasswordSalt").IsRequired();
         builder.Property(u => u.PasswordHash).HasColumnName("PasswordHash").IsRequired();
-        builder
-            .Property(u => u.AuthenticatorType)
-            .HasColumnName("AuthenticatorType")
-            .HasDefaultValue(AuthenticatorType.None);
+        builder.Property(u => u.AuthenticatorType).HasColumnName("AuthenticatorType").IsRequired();
         builder.Property(u => u.UserGroupId).HasColumnName("UserGroupId").IsRequired();
         builder.Property(u => u.CreatedDate).HasColumnName("CreatedDate").IsRequired();
         builder.Property(u => u.UpdatedDate).HasColumnName("UpdatedDate").IsRequired(false);

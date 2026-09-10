@@ -1,4 +1,5 @@
 ﻿using Core.Security.Extensions;
+using Core.Security.JWT;
 using Domain.Entities;
 using MediatR;
 using Microsoft.AspNetCore.Mvc;
@@ -16,17 +17,28 @@ public class BaseController : ControllerBase
 
     private IMediator? _mediator;
 
-    protected string GetIpAddress()
+    private readonly TokenOptions _tokenOptions;
+
+    public BaseController(IConfiguration configuration)
     {
-        string ipAddress = Request.Headers.TryGetValue(
+        const string tokenOptionsConfigurationSection = "TokenOptions";
+        _tokenOptions =
+            configuration.GetSection(tokenOptionsConfigurationSection).Get<TokenOptions>()
+            ?? throw new NullReferenceException(
+                $"\"{tokenOptionsConfigurationSection}\" section cannot found in configuration"
+            );
+    }
+
+    protected string? GetIpAddress()
+    {
+        bool isForwardedForHeaderPresent = Request.Headers.TryGetValue(
             "X-Forwarded-For",
-            out Microsoft.Extensions.Primitives.StringValues value
-        )
-            ? value.ToString()
-            : HttpContext.Connection.RemoteIpAddress?.MapToIPv4().ToString()
-                ?? throw new InvalidOperationException(
-                    "IP address cannot be retrieved from request."
-                );
+            out Microsoft.Extensions.Primitives.StringValues ipAddress
+        );
+        if (isForwardedForHeaderPresent)
+            return ipAddress.ToString();
+
+        ipAddress = HttpContext.Connection.RemoteIpAddress?.MapToIPv4().ToString();
         return ipAddress;
     }
 
@@ -38,13 +50,12 @@ public class BaseController : ControllerBase
 
     protected ICollection<string> GetUserRolesFromRequest()
     {
-        return HttpContext.User.GetRoleClaims() ?? Array.Empty<string>();
+        return HttpContext.User.GetRoleClaims() ?? [];
     }
 
-    protected string GetRefreshTokenFromCookies()
+    protected string? GetRefreshTokenFromCookies()
     {
-        return Request.Cookies["refreshToken"]
-            ?? throw new ArgumentException("Refresh token is not found in request cookies.");
+        return Request.Cookies["refreshToken"];
     }
 
     protected void SetRefreshTokenToCookie(RefreshToken refreshToken)
@@ -53,7 +64,7 @@ public class BaseController : ControllerBase
         {
             Secure = true,
             SameSite = SameSiteMode.Strict,
-            Expires = DateTime.UtcNow.AddDays(7),
+            Expires = DateTime.UtcNow.AddDays(_tokenOptions.RefreshTokenTTL),
         };
         Response.Cookies.Append(key: "refreshToken", refreshToken.Token, cookieOptions);
     }
