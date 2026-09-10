@@ -1,0 +1,3 @@
+[submodule "src/corePackages"]
+	path = src/corePackages
+	url = https://github.com/furkanyazar/net.Core.git

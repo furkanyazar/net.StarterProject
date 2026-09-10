@@ -1,0 +1,39 @@
+<Solution>
+    <Folder Name="/Solution Items/">
+        <File Path=".csharpierrc" />
+        <File Path=".editorconfig" />
+        <File Path=".gitattributes" />
+        <File Path=".gitignore" />
+        <File Path=".gitmodules" />
+    </Folder>
+    <Folder Name="/Solution Items/.config/">
+        <File Path=".config/dotnet-tools.json" />
+    </Folder>
+    <Folder Name="/Solution Items/.github/" />
+    <Folder Name="/Solution Items/.github/workflows/">
+        <File Path=".github/workflows/dotnet.yml" />
+    </Folder>
+    <Folder Name="/Solution Items/docs/">
+        <File Path="docs/Semantic Branch Names.md" />
+        <File Path="docs/Semantic Commit Messages.md" />
+    </Folder>
+    <Folder Name="/src/" />
+    <Folder Name="/src/corePackages/">
+        <Project Path="src/corePackages/src/Core.Application/Core.Application.csproj" />
+        <Project Path="src/corePackages/src/Core.CrossCuttingConcerns/Core.CrossCuttingConcerns.csproj" />
+        <Project Path="src/corePackages/src/Core.ElasticSearch/Core.ElasticSearch.csproj" />
+        <Project Path="src/corePackages/src/Core.Localization/Core.Localization.csproj" />
+        <Project Path="src/corePackages/src/Core.Mailing/Core.Mailing.csproj" />
+        <Project Path="src/corePackages/src/Core.Persistence/Core.Persistence.csproj" />
+        <Project Path="src/corePackages/src/Core.Security/Core.Security.csproj" />
+        <Project Path="src/corePackages/src/Core.Test/Core.Test.csproj" />
+        <Project Path="src/corePackages/src/Core.Translation/Core.Translation.csproj" />
+    </Folder>
+    <Folder Name="/src/starterProject/">
+        <Project Path="src/starterProject/Application/Application.csproj" />
+        <Project Path="src/starterProject/Domain/Domain.csproj" />
+        <Project Path="src/starterProject/Infrastructure/Infrastructure.csproj" />
+        <Project Path="src/starterProject/Persistence/Persistence.csproj" />
+        <Project Path="src/starterProject/WebAPI/WebAPI.csproj" />
+    </Folder>
+</Solution>
