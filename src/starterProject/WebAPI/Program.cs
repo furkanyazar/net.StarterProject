@@ -2,6 +2,7 @@ using Application;
 using Core.Application.Pipelines.Caching;
 using Core.CrossCuttingConcerns.Exception.WebApi.Extensions;
 using Core.CrossCuttingConcerns.Logging.Configurations;
+using Core.Localization.WebApi;
 using Core.Security.Encryption;
 using Core.Security.JWT;
 using Infrastructure;
@@ -90,5 +91,7 @@ app.UseAuthorization();
 app.UseStaticFiles();
 
 app.MapControllers();
+
+app.UseResponseLocalization();
 
 app.Run();

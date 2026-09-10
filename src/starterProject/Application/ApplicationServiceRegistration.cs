@@ -8,6 +8,7 @@ using Core.Application.Rules;
 using Core.CrossCuttingConcerns.Logging.Abstraction;
 using Core.CrossCuttingConcerns.Logging.Configurations;
 using Core.CrossCuttingConcerns.Logging.Serilog.File;
+using Core.Localization.Resource.Yaml.DependencyInjection;
 using Core.Security.DependencyInjection;
 using Core.Security.JWT;
 using FluentValidation;
@@ -47,6 +48,8 @@ public static class ApplicationServiceRegistration
         ));
 
         services.AddSecurityServices<int, int, Guid>(tokenOptions);
+
+        services.AddYamlResourceLocalization();
 
         return services;
     }
