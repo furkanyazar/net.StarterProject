@@ -1,6 +1,5 @@
 ﻿using Application.Services.MailTemplateService;
 using Application.Services.QueueService;
-using AutoMapper;
 using Core.CrossCuttingConcerns.Logging.Abstraction;
 using Core.Mailing;
 using Domain.Constants;
@@ -15,8 +14,7 @@ public class QueueHostedService(
     QueueServiceBase queueService,
     IMailService mailService,
     ILogger logger,
-    IServiceProvider serviceProvider,
-    IMapper mapper
+    IServiceProvider serviceProvider
 ) : BackgroundService
 {
     protected override async Task ExecuteAsync(CancellationToken stoppingToken)
