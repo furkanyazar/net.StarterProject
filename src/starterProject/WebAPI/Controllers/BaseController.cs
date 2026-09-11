@@ -1,5 +1,6 @@
 ﻿using Core.Security.Extensions;
 using Core.Security.JWT;
+using Domain.Dtos.Mail;
 using Domain.Entities;
 using MediatR;
 using Microsoft.AspNetCore.Mvc;
@@ -20,6 +21,7 @@ public class BaseController : ControllerBase
     private IMediator? _mediator;
 
     private readonly TokenOptions _tokenOptions;
+    private readonly WebAPIConfiguration _webApiConfiguration;
 
     public BaseController(IConfiguration configuration)
     {
@@ -28,6 +30,13 @@ public class BaseController : ControllerBase
             configuration.GetSection(tokenOptionsConfigurationSection).Get<TokenOptions>()
             ?? throw new NullReferenceException(
                 $"\"{tokenOptionsConfigurationSection}\" section cannot found in configuration"
+            );
+
+        const string webApiConfigurationSection = "WebAPIConfiguration";
+        _webApiConfiguration =
+            configuration.GetSection(webApiConfigurationSection).Get<WebAPIConfiguration>()
+            ?? throw new NullReferenceException(
+                $"\"{webApiConfigurationSection}\" section cannot found in configuration"
             );
     }
 
@@ -64,6 +73,17 @@ public class BaseController : ControllerBase
                 .FirstOrDefault();
 
         return null;
+    }
+
+    protected SendMailDto GetMailInfo()
+    {
+        SendMailDto sendMailDto = new()
+        {
+            AppDomain = _webApiConfiguration.AppDomain,
+            AppName = _webApiConfiguration.AppName,
+            Locale = GetLocale(),
+        };
+        return sendMailDto;
     }
 
     protected int GetUserIdFromRequest()
