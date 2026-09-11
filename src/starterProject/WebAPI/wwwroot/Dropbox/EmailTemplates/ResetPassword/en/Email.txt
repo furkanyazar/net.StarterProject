@@ -1,0 +1,8 @@
+Hello {{ name }},
+
+Your password has been changed.
+
+Sincerely,
+
+{{ app_name }}
+{{ app_domain }}

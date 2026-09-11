@@ -49,7 +49,7 @@ public class RegisterCommand : IRequest<RegisteredResponse>
             User createdUser = await userService.CreateUser(createUser);
             User addedUser = await userService.AddUser(createdUser);
 
-            await userService.SendWelcomeSystemMailToUserEmail(addedUser, request.SendMailDto);
+            await userService.SendRegisterMailToUserEmail(addedUser, request.SendMailDto);
 
             AccessToken createdAccessToken = await authService.CreateAccessToken(addedUser);
 

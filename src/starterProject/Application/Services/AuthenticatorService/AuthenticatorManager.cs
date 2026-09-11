@@ -31,7 +31,18 @@ public class AuthenticatorManager(
             UserId = user.Id,
             ActivationKey = await emailAuthenticatorHelper.CreateEmailActivationKey(),
             IsVerified = false,
+            ExpirationDate = DateTime.UtcNow.AddMinutes(30),
         };
+        return emailAuthenticator;
+    }
+
+    public async Task<EmailAuthenticator?> GetEmailAuthenticatorByActivationKey(
+        string activationKey
+    )
+    {
+        EmailAuthenticator? emailAuthenticator = await emailAuthenticatorRepository.GetAsync(ea =>
+            ea.ActivationKey == activationKey
+        );
         return emailAuthenticator;
     }
 
@@ -59,5 +70,11 @@ public class AuthenticatorManager(
         };
 
         await mailQueueService.SendAsync(mailDto);
+    }
+
+    public async Task VerifyEmailAuthenticator(EmailAuthenticator emailAuthenticator)
+    {
+        emailAuthenticator.IsVerified = true;
+        await emailAuthenticatorRepository.UpdateAsync(emailAuthenticator);
     }
 }

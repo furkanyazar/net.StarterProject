@@ -65,4 +65,28 @@ public class AuthBusinessRules(
                 await localizationService.GetLocalizedAsync(AuthMessages.RefreshTokenDoesNotActive)
             );
     }
+
+    public async Task EmailAuthenticatorShouldExistWhenSelected(
+        EmailAuthenticator? emailAuthenticator
+    )
+    {
+        if (emailAuthenticator is null)
+            throw new NotFoundException(
+                await localizationService.GetLocalizedAsync(
+                    AuthMessages.EmailAuthenticatorDoesNotExist
+                )
+            );
+    }
+
+    public async Task EmailAuthenticatorShouldBeActiveWhenSelected(
+        EmailAuthenticator emailAuthenticator
+    )
+    {
+        if (DateTime.UtcNow >= emailAuthenticator.ExpirationDate || emailAuthenticator.IsVerified)
+            throw new BusinessException(
+                await localizationService.GetLocalizedAsync(
+                    AuthMessages.EmailAuthenticatorDoesNotActive
+                )
+            );
+    }
 }

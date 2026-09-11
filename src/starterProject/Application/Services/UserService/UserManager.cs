@@ -44,11 +44,11 @@ public class UserManager(IUserRepository userRepository, IMailQueueService mailQ
         return user;
     }
 
-    public async Task SendWelcomeSystemMailToUserEmail(User user, SendMailDto sendMailDto)
+    public async Task SendRegisterMailToUserEmail(User user, SendMailDto sendMailDto)
     {
         MailDto mailDto = new()
         {
-            TemplateName = "WelcomeSystem",
+            TemplateName = "Register",
             Locale = sendMailDto.Locale,
             ToList = [new(user.Name, user.Email)],
             Model = new
@@ -60,5 +60,29 @@ public class UserManager(IUserRepository userRepository, IMailQueueService mailQ
         };
 
         await mailQueueService.SendAsync(mailDto);
+    }
+
+    public async Task SendResetPasswordMailToUserEmail(User user, SendMailDto sendMailDto)
+    {
+        MailDto mailDto = new()
+        {
+            TemplateName = "ResetPassword",
+            Locale = sendMailDto.Locale,
+            ToList = [new(user.Name, user.Email)],
+            Model = new
+            {
+                user.Name,
+                sendMailDto.AppName,
+                sendMailDto.AppDomain,
+            },
+        };
+
+        await mailQueueService.SendAsync(mailDto);
+    }
+
+    public async Task<User> UpdateUser(User user)
+    {
+        User updatedUser = await userRepository.UpdateAsync(user);
+        return updatedUser;
     }
 }
