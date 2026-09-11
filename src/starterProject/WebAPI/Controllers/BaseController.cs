@@ -40,7 +40,7 @@ public class BaseController : ControllerBase
             );
     }
 
-    protected string? GetIpAddress()
+    protected string GetIpAddress()
     {
         bool isForwardedForHeaderPresent = Request.Headers.TryGetValue(
             "X-Forwarded-For",
@@ -50,7 +50,7 @@ public class BaseController : ControllerBase
             return ipAddress.ToString();
 
         ipAddress = HttpContext.Connection.RemoteIpAddress?.MapToIPv4().ToString();
-        return ipAddress;
+        return ipAddress.ToString() ?? string.Empty;
     }
 
     protected string? GetLocale()
@@ -97,9 +97,9 @@ public class BaseController : ControllerBase
         return HttpContext.User.GetRoleClaims() ?? [];
     }
 
-    protected string? GetRefreshTokenFromCookies()
+    protected string GetRefreshTokenFromCookies()
     {
-        return Request.Cookies["refreshToken"];
+        return Request.Cookies["refreshToken"] ?? string.Empty;
     }
 
     protected void SetRefreshTokenToCookie(RefreshToken refreshToken)
