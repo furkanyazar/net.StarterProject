@@ -9,7 +9,6 @@ public static class AuthServiceRegistrations
     public static void AddAuthServices(this IServiceCollection services)
     {
         services.AddTransient<UserFakeData>();
-        services.AddTransient<RefreshTokenFakeData>();
         services.AddTransient<LoginCommand>();
         services.AddTransient<LoginCommandValidator>();
     }

@@ -1,6 +1,4 @@
-﻿using Application.Features.Auth.Profiles;
-using Application.Features.Auth.Rules;
-using Application.Services.Repositories;
+﻿using Application.Services.Repositories;
 using Application.Tests.Mocks.FakeDatas;
 using Core.Test.Application.Repositories;
 using Domain.Entities;
@@ -12,7 +10,7 @@ public class RefreshTokenMockRepository(RefreshTokenFakeData refreshTokenFakeDat
         IRefreshTokenRepository,
         RefreshToken,
         Guid,
-        MappingProfiles,
-        AuthBusinessRules,
+        RefreshTokenFakeMappingProfiles,
+        RefreshTokenFakeBusinessRules,
         RefreshTokenFakeData
     >(refreshTokenFakeData) { }
