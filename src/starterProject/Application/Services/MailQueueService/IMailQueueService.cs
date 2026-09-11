@@ -1,8 +1,8 @@
-﻿using Core.Mailing;
+﻿using Domain.Dtos.Mail;
 
 namespace Application.Services.MailQueueService;
 
 public interface IMailQueueService
 {
-    public Task SendAsync(Mail mail);
+    public Task SendAsync(MailDto mailDto);
 }

@@ -2,10 +2,10 @@
 
 public abstract class MailTemplateServiceBase
 {
-    public abstract Task<RenderedEmail> RenderAsync<TModel>(
+    public abstract Task<RenderedEmail> RenderAsync(
         string templateName,
         string? locale,
-        TModel model
+        object? model
     );
 }
 

@@ -1,20 +1,17 @@
 ﻿using System.Text;
 using System.Web;
 using Application.Services.MailQueueService;
-using Application.Services.MailTemplateService;
 using Application.Services.Repositories;
-using Core.Mailing;
 using Core.Security.EmailAuthenticator;
+using Domain.Dtos.Mail;
 using Domain.Entities;
-using MimeKit;
 
 namespace Application.Services.AuthenticatorService;
 
 public class AuthenticatorManager(
     IEmailAuthenticatorHelper emailAuthenticatorHelper,
     IEmailAuthenticatorRepository emailAuthenticatorRepository,
-    IMailQueueService mailQueueService,
-    MailTemplateServiceBase mailTemplateService
+    IMailQueueService mailQueueService
 ) : IAuthenticatorService
 {
     public async Task<EmailAuthenticator> AddEmailAuthenticator(
@@ -49,28 +46,20 @@ public class AuthenticatorManager(
         string key = HttpUtility.UrlEncode(emailAuthenticator.ActivationKey!, Encoding.UTF8);
         string url = $"{appDomain}/reset-password/{key}";
 
-        var model = new
+        MailDto mailDto = new()
         {
-            user.Name,
-            ResetLink = url,
-            AppName = appName,
-            AppDomain = appDomain,
-        };
-        RenderedEmail email = await mailTemplateService.RenderAsync(
-            "ForgotPassword",
-            locale,
-            model
-        );
-
-        List<MailboxAddress> toList = [new(user.Name, user.Email)];
-        Mail mail = new()
-        {
-            Subject = email.Subject,
-            HtmlBody = email.HtmlBody,
-            TextBody = email.TextBody,
-            ToList = toList,
+            TemplateName = "ForgotPassword",
+            Locale = locale,
+            ToList = [new(user.Name, user.Email)],
+            Model = new
+            {
+                user.Name,
+                ResetLink = url,
+                AppName = appName,
+                AppDomain = appDomain,
+            },
         };
 
-        await mailQueueService.SendAsync(mail);
+        await mailQueueService.SendAsync(mailDto);
     }
 }

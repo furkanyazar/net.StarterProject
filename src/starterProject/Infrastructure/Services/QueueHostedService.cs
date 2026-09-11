@@ -1,15 +1,22 @@
-﻿using Application.Services.QueueService;
+﻿using Application.Services.MailTemplateService;
+using Application.Services.QueueService;
+using AutoMapper;
 using Core.CrossCuttingConcerns.Logging.Abstraction;
 using Core.Mailing;
 using Domain.Constants;
+using Domain.Dtos.Mail;
+using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
+using MimeKit;
 
 namespace Infrastructure.Services;
 
 public class QueueHostedService(
     QueueServiceBase queueService,
     IMailService mailService,
-    ILogger logger
+    ILogger logger,
+    IServiceProvider serviceProvider,
+    IMapper mapper
 ) : BackgroundService
 {
     protected override async Task ExecuteAsync(CancellationToken stoppingToken)
@@ -41,13 +48,38 @@ public class QueueHostedService(
 
         await queueService.BindConsumerAsync(
             queueName: QueueNames.SendEmailQueue,
-            handleMessageAsync: (Func<Mail, Task>)SendEmail,
+            handleMessageAsync: (Func<MailDto, Task>)SendEmail,
             enableOrdering: true
         );
     }
 
-    private async Task SendEmail(Mail mail)
+    private async Task SendEmail(MailDto mailDto)
     {
+        using var scope = serviceProvider.CreateAsyncScope();
+
+        MailTemplateServiceBase mailTemplateService =
+            scope.ServiceProvider.GetRequiredService<MailTemplateServiceBase>();
+
+        RenderedEmail email = await mailTemplateService.RenderAsync(
+            mailDto.TemplateName,
+            mailDto.Locale,
+            mailDto.Model
+        );
+
+        List<MailboxAddress> toList =
+        [
+            .. mailDto.ToList.Select(t => new MailboxAddress(t.Name, t.Email)),
+        ];
+        Mail mail = new()
+        {
+            Subject = email.Subject,
+            HtmlBody = email.HtmlBody,
+            TextBody = email.TextBody,
+            ToList = toList,
+        };
+
         await mailService.SendEmailAsync(mail);
+
+        await scope.DisposeAsync();
     }
 }

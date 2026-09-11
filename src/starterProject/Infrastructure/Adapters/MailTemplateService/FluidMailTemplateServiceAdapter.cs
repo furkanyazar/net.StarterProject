@@ -5,10 +5,10 @@ namespace Infrastructure.Adapters.MailTemplateService;
 
 public class FluidMailTemplateServiceAdapter : MailTemplateServiceBase
 {
-    public override async Task<RenderedEmail> RenderAsync<TModel>(
+    public override async Task<RenderedEmail> RenderAsync(
         string templateName,
         string? locale,
-        TModel model
+        object? model
     )
     {
         string folderPath = Path.Combine(
@@ -31,24 +31,30 @@ public class FluidMailTemplateServiceAdapter : MailTemplateServiceBase
         if (!subjectExist || !htmlExist || !textExist)
             throw new FileNotFoundException();
 
-        string subjectContent = await File.ReadAllTextAsync(subjectPath);
-        string htmlContent = await File.ReadAllTextAsync(htmlPath);
-        string textContent = await File.ReadAllTextAsync(textPath);
+        string subject = await File.ReadAllTextAsync(subjectPath);
+        string htmlBody = await File.ReadAllTextAsync(htmlPath);
+        string textBody = await File.ReadAllTextAsync(textPath);
 
-        FluidParser parser = new();
+        if (model is not null)
+        {
+            FluidParser parser = new();
 
-        IFluidTemplate subjectTemplate = parser.Parse(subjectContent);
-        IFluidTemplate htmlTemplate = parser.Parse(htmlContent);
-        IFluidTemplate textTemplate = parser.Parse(textContent);
+            IFluidTemplate subjectTemplate = parser.Parse(subject);
+            IFluidTemplate htmlTemplate = parser.Parse(htmlBody);
+            IFluidTemplate textTemplate = parser.Parse(textBody);
 
-        TemplateOptions options = new() { MemberAccessStrategy = new UnsafeMemberAccessStrategy() };
-        options.MemberAccessStrategy.MemberNameStrategy = MemberNameStrategies.SnakeCase;
+            TemplateOptions options = new()
+            {
+                MemberAccessStrategy = new UnsafeMemberAccessStrategy(),
+            };
+            options.MemberAccessStrategy.MemberNameStrategy = MemberNameStrategies.SnakeCase;
 
-        TemplateContext context = new(model, options);
+            TemplateContext context = new(model, options);
 
-        string subject = await subjectTemplate.RenderAsync(context);
-        string htmlBody = await htmlTemplate.RenderAsync(context);
-        string textBody = await textTemplate.RenderAsync(context);
+            subject = await subjectTemplate.RenderAsync(context);
+            htmlBody = await htmlTemplate.RenderAsync(context);
+            textBody = await textTemplate.RenderAsync(context);
+        }
 
         return new RenderedEmail(subject, htmlBody, textBody);
     }
