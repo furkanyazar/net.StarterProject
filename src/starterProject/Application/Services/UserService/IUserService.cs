@@ -1,4 +1,5 @@
-﻿using Domain.Dtos.Users;
+﻿using Domain.Dtos.Mail;
+using Domain.Dtos.Users;
 using Domain.Entities;
 
 namespace Application.Services.UserService;
@@ -9,4 +10,5 @@ public interface IUserService
     public Task<User> CreateUser(CreateUserDto createUser);
     public Task<User?> GetByEmail(string email);
     public Task<User?> GetById(int id);
+    public Task SendWelcomeSystemMailToUserEmail(User user, SendMailDto sendMailDto);
 }

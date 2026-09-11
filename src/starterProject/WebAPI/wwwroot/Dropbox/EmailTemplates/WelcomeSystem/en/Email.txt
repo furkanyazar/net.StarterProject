@@ -1,0 +1,8 @@
+Hello {{ name }},
+
+Welcome!
+
+Sincerely,
+
+{{ app_name }}
+{{ app_domain }}

@@ -1,4 +1,4 @@
-﻿using Application.Services.MailQueueService;
+﻿using Domain.Dtos.Mail;
 using Domain.Entities;
 
 namespace Application.Services.AuthenticatorService;
@@ -7,11 +7,9 @@ public interface IAuthenticatorService
 {
     public Task<EmailAuthenticator> AddEmailAuthenticator(EmailAuthenticator emailAuthenticator);
     public Task<EmailAuthenticator> CreateEmailAuthenticator(User user);
-    public Task SendForgotPasswordToUserEmail(
+    public Task SendForgotPasswordMailToUserEmail(
         EmailAuthenticator emailAuthenticator,
         User user,
-        string appDomain,
-        string? locale,
-        string appName
+        SendMailDto sendMailDto
     );
 }

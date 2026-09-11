@@ -35,28 +35,26 @@ public class AuthenticatorManager(
         return emailAuthenticator;
     }
 
-    public async Task SendForgotPasswordToUserEmail(
+    public async Task SendForgotPasswordMailToUserEmail(
         EmailAuthenticator emailAuthenticator,
         User user,
-        string appDomain,
-        string? locale,
-        string appName
+        SendMailDto sendMailDto
     )
     {
         string key = HttpUtility.UrlEncode(emailAuthenticator.ActivationKey!, Encoding.UTF8);
-        string url = $"{appDomain}/reset-password/{key}";
+        string url = $"{sendMailDto.AppDomain}/reset-password/{key}";
 
         MailDto mailDto = new()
         {
             TemplateName = "ForgotPassword",
-            Locale = locale,
+            Locale = sendMailDto.Locale,
             ToList = [new(user.Name, user.Email)],
             Model = new
             {
                 user.Name,
+                sendMailDto.AppName,
+                sendMailDto.AppDomain,
                 ResetLink = url,
-                AppName = appName,
-                AppDomain = appDomain,
             },
         };
 

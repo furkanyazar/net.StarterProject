@@ -3,6 +3,7 @@ using Application.Services.AuthService;
 using Application.Services.UserService;
 using AutoMapper;
 using Core.Security.JWT;
+using Domain.Dtos.Mail;
 using Domain.Dtos.Users;
 using Domain.Entities;
 using MediatR;
@@ -14,6 +15,7 @@ public class RegisterCommand : IRequest<RegisteredResponse>
     public string Email { get; set; }
     public string Password { get; set; }
     public string IpAddress { get; set; }
+    public SendMailDto SendMailDto { get; set; } = default!;
 
     public RegisterCommand()
     {
@@ -22,7 +24,7 @@ public class RegisterCommand : IRequest<RegisteredResponse>
         IpAddress = string.Empty;
     }
 
-    public RegisterCommand(string email, string password, string ipAddress)
+    public RegisterCommand(string email, string password, string ipAddress, SendMailDto sendMailDto)
     {
         Email = email;
         Password = password;
@@ -46,6 +48,8 @@ public class RegisterCommand : IRequest<RegisteredResponse>
             CreateUserDto createUser = mapper.Map<CreateUserDto>(request);
             User createdUser = await userService.CreateUser(createUser);
             User addedUser = await userService.AddUser(createdUser);
+
+            await userService.SendWelcomeSystemMailToUserEmail(addedUser, request.SendMailDto);
 
             AccessToken createdAccessToken = await authService.CreateAccessToken(addedUser);
 

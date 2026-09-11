@@ -1,11 +1,14 @@
-﻿using Application.Services.Repositories;
+﻿using Application.Services.MailQueueService;
+using Application.Services.Repositories;
 using Core.Security.Hashing;
+using Domain.Dtos.Mail;
 using Domain.Dtos.Users;
 using Domain.Entities;
 
 namespace Application.Services.UserService;
 
-public class UserManager(IUserRepository userRepository) : IUserService
+public class UserManager(IUserRepository userRepository, IMailQueueService mailQueueService)
+    : IUserService
 {
     public async Task<User> AddUser(User user)
     {
@@ -39,5 +42,23 @@ public class UserManager(IUserRepository userRepository) : IUserService
     {
         User? user = await userRepository.GetAsync(predicate: u => u.Id == id);
         return user;
+    }
+
+    public async Task SendWelcomeSystemMailToUserEmail(User user, SendMailDto sendMailDto)
+    {
+        MailDto mailDto = new()
+        {
+            TemplateName = "WelcomeSystem",
+            Locale = sendMailDto.Locale,
+            ToList = [new(user.Name, user.Email)],
+            Model = new
+            {
+                user.Name,
+                sendMailDto.AppName,
+                sendMailDto.AppDomain,
+            },
+        };
+
+        await mailQueueService.SendAsync(mailDto);
     }
 }

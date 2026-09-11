@@ -1,6 +1,7 @@
 ﻿using Application.Features.Auth.Rules;
 using Application.Services.AuthenticatorService;
 using Application.Services.UserService;
+using Domain.Dtos.Mail;
 using Domain.Entities;
 using MediatR;
 
@@ -9,23 +10,17 @@ namespace Application.Features.Auth.Commands.ForgotPassword;
 public class ForgotPasswordCommand : IRequest
 {
     public string Email { get; set; }
-    public string AppDomain { get; set; }
-    public string AppName { get; set; }
-    public string? Locale { get; set; }
+    public SendMailDto SendMailDto { get; set; } = default!;
 
     public ForgotPasswordCommand()
     {
         Email = string.Empty;
-        AppDomain = string.Empty;
-        AppName = string.Empty;
     }
 
-    public ForgotPasswordCommand(string email, string appDomain, string appName, string? locale)
+    public ForgotPasswordCommand(string email, SendMailDto sendMailDto)
     {
         Email = email;
-        AppDomain = appDomain;
-        AppName = appName;
-        Locale = locale;
+        SendMailDto = sendMailDto;
     }
 
     public class ForgotPasswordCommandHandler(
@@ -44,12 +39,10 @@ public class ForgotPasswordCommand : IRequest
             EmailAuthenticator addedEmailAuthenticator =
                 await authenticatorService.AddEmailAuthenticator(createdEmailAuthenticator);
 
-            await authenticatorService.SendForgotPasswordToUserEmail(
+            await authenticatorService.SendForgotPasswordMailToUserEmail(
                 addedEmailAuthenticator,
                 user!,
-                request.AppDomain,
-                request.Locale,
-                request.AppName
+                request.SendMailDto
             );
         }
     }
