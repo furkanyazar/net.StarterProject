@@ -4,4 +4,4 @@ namespace WebAPI.Controllers;
 
 [ApiController]
 [Route("api/[controller]")]
-public class AuthController : BaseController { }
+public class AuthController(IConfiguration configuration) : BaseController(configuration) { }
