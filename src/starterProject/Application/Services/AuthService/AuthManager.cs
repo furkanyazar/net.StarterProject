@@ -33,6 +33,12 @@ public class AuthManager : IAuthService
         _mapper = mapper;
     }
 
+    public async Task<RefreshToken> AddRefreshToken(RefreshToken refreshToken)
+    {
+        RefreshToken addedRefreshToken = await _refreshTokenRepository.AddAsync(refreshToken);
+        return addedRefreshToken;
+    }
+
     public Task<AccessToken> CreateAccessToken(User user)
     {
         AccessToken accessToken = _tokenHelper.CreateToken(user, []);
@@ -44,12 +50,6 @@ public class AuthManager : IAuthService
         RefreshToken<Guid, int> coreRefreshToken = _tokenHelper.CreateRefreshToken(user, ipAddress);
         RefreshToken refreshToken = _mapper.Map<RefreshToken>(coreRefreshToken);
         return Task.FromResult(refreshToken);
-    }
-
-    public async Task<RefreshToken> AddRefreshToken(RefreshToken refreshToken)
-    {
-        RefreshToken addedRefreshToken = await _refreshTokenRepository.AddAsync(refreshToken);
-        return addedRefreshToken;
     }
 
     public async Task DeleteOldRefreshTokens(int userId)
@@ -89,6 +89,20 @@ public class AuthManager : IAuthService
             await RevokeDescendantRefreshTokens(refreshToken: childToken!, ipAddress, reason);
     }
 
+    public async Task RevokeRefreshToken(
+        RefreshToken refreshToken,
+        string ipAddress,
+        string? reason = null,
+        string? replacedByToken = null
+    )
+    {
+        refreshToken.RevokedDate = DateTime.UtcNow;
+        refreshToken.RevokedByIp = ipAddress;
+        refreshToken.ReasonRevoked = reason;
+        refreshToken.ReplacedByToken = replacedByToken;
+        await _refreshTokenRepository.UpdateAsync(refreshToken);
+    }
+
     public async Task<RefreshToken> RotateRefreshToken(
         User user,
         RefreshToken refreshToken,
@@ -107,19 +121,5 @@ public class AuthManager : IAuthService
             newRefreshToken.Token
         );
         return newRefreshToken;
-    }
-
-    public async Task RevokeRefreshToken(
-        RefreshToken refreshToken,
-        string ipAddress,
-        string? reason = null,
-        string? replacedByToken = null
-    )
-    {
-        refreshToken.RevokedDate = DateTime.UtcNow;
-        refreshToken.RevokedByIp = ipAddress;
-        refreshToken.ReasonRevoked = reason;
-        refreshToken.ReplacedByToken = replacedByToken;
-        await _refreshTokenRepository.UpdateAsync(refreshToken);
     }
 }

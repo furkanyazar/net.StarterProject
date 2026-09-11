@@ -7,6 +7,12 @@ namespace Application.Services.UserService;
 
 public class UserManager(IUserRepository userRepository) : IUserService
 {
+    public async Task<User> AddUser(User user)
+    {
+        User createdUser = await userRepository.AddAsync(user);
+        return createdUser;
+    }
+
     public async Task<User> CreateUser(CreateUserDto createUser)
     {
         HashingHelper.CreatePasswordHash(
@@ -14,25 +20,22 @@ public class UserManager(IUserRepository userRepository) : IUserService
             out byte[] passwordHash,
             out byte[] passwordSalt
         );
-
         User user = new()
         {
             Email = createUser.Email,
             PasswordHash = passwordHash,
             PasswordSalt = passwordSalt,
         };
-
-        User createdUser = await userRepository.AddAsync(user);
-        return createdUser;
+        return user;
     }
 
-    public async Task<User?> GetByEmailAsync(string email)
+    public async Task<User?> GetByEmail(string email)
     {
         User? user = await userRepository.GetAsync(predicate: u => u.Email == email);
         return user;
     }
 
-    public async Task<User?> GetByIdAsync(int id)
+    public async Task<User?> GetById(int id)
     {
         User? user = await userRepository.GetAsync(predicate: u => u.Id == id);
         return user;

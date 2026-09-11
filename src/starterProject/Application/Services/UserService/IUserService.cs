@@ -5,7 +5,8 @@ namespace Application.Services.UserService;
 
 public interface IUserService
 {
-    public Task<User?> GetByEmailAsync(string email);
+    public Task<User> AddUser(User user);
     public Task<User> CreateUser(CreateUserDto createUser);
-    public Task<User?> GetByIdAsync(int id);
+    public Task<User?> GetByEmail(string email);
+    public Task<User?> GetById(int id);
 }

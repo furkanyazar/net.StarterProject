@@ -21,6 +21,8 @@ public class UserConfiguration : IEntityTypeConfiguration<User>
         builder.Property(u => u.UpdatedDate).HasColumnName("UpdatedDate").IsRequired(false);
         builder.Property(u => u.DeletedDate).HasColumnName("DeletedDate").IsRequired(false);
 
+        builder.Ignore(u => u.Name);
+
         builder.HasQueryFilter(u => !u.DeletedDate.HasValue);
 
         builder.HasOne(u => u.UserGroup);

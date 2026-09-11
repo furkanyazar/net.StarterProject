@@ -1,0 +1,16 @@
+<html>
+<head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+</head>
+<body>
+    <div style="font-family: Arial, Helvetica, sans-serif">
+        <p>Hello {{ name }},</p>
+        <p>
+            Your password reset link:
+        </p>
+        <a href="{{ reset_link }}">{{ reset_link }}</a>
+        <p>Sincerely,</p>
+        <p><a href="{{ app_domain }}">{{ app_name }}</a></p>
+    </div>
+</body>
+</html>

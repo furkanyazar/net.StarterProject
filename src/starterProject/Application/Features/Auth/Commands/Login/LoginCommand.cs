@@ -38,7 +38,7 @@ public class LoginCommand : IRequest<LoggedResponse>
             CancellationToken cancellationToken
         )
         {
-            User? user = await userService.GetByEmailAsync(request.Email);
+            User? user = await userService.GetByEmail(request.Email);
             await authBusinessRules.UserShouldExistWhenLogin(user);
             await authBusinessRules.UserPasswordShouldMatchWhenLogin(
                 request.Password,

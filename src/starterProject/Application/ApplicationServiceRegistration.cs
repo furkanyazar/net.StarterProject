@@ -1,5 +1,7 @@
 ﻿using System.Reflection;
+using Application.Services.AuthenticatorService;
 using Application.Services.AuthService;
+using Application.Services.MailQueueService;
 using Application.Services.UserService;
 using Core.Application.Pipelines.Authorization;
 using Core.Application.Pipelines.Caching;
@@ -10,7 +12,10 @@ using Core.Application.Rules;
 using Core.CrossCuttingConcerns.Logging.Abstraction;
 using Core.CrossCuttingConcerns.Logging.Configurations;
 using Core.CrossCuttingConcerns.Logging.Serilog.File;
+using Core.ElasticSearch;
 using Core.Localization.Resource.Yaml.DependencyInjection;
+using Core.Mailing;
+using Core.Mailing.MailKit;
 using Core.Security.DependencyInjection;
 using Core.Security.JWT;
 using FluentValidation;
@@ -45,6 +50,8 @@ public static class ApplicationServiceRegistration
 
         services.AddValidatorsFromAssembly(Assembly.GetExecutingAssembly());
 
+        services.AddSingleton<IMailService, MailKitMailService>();
+        services.AddSingleton<IElasticSearch, ElasticSearchManager>();
         services.AddSingleton<ILogger, SerilogFileLogger>(_ => new SerilogFileLogger(
             fileLogConfiguration
         ));
@@ -55,6 +62,8 @@ public static class ApplicationServiceRegistration
 
         services.AddScoped<IAuthService, AuthManager>();
         services.AddScoped<IUserService, UserManager>();
+        services.AddScoped<IAuthenticatorService, AuthenticatorManager>();
+        services.AddScoped<IMailQueueService, MailQueueManager>();
 
         return services;
     }

@@ -48,7 +48,7 @@ public class RefreshTokenCommand : IRequest<RefreshedTokenResponse>
                     reason: $"Attempted reuse of revoked ancestor token: {refreshToken.Token}"
                 );
 
-            User? user = await userService.GetByIdAsync(refreshToken.UserId);
+            User? user = await userService.GetById(refreshToken.UserId);
             await authBusinessRules.UserShouldExistWhenRequested(user);
 
             Domain.Entities.RefreshToken newRefreshToken = await authService.RotateRefreshToken(

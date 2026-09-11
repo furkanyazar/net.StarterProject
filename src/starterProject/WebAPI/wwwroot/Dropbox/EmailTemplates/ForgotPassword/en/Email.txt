@@ -1,0 +1,10 @@
+Hello {{ name }},
+
+Your password reset link:
+
+{{ reset_link }}
+
+Sincerely,
+
+{{ app_name }}
+{{ app_domain }}

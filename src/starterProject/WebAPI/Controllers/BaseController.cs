@@ -3,6 +3,8 @@ using Core.Security.JWT;
 using Domain.Entities;
 using MediatR;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.Extensions.Primitives;
+using Microsoft.Net.Http.Headers;
 
 namespace WebAPI.Controllers;
 
@@ -33,13 +35,35 @@ public class BaseController : ControllerBase
     {
         bool isForwardedForHeaderPresent = Request.Headers.TryGetValue(
             "X-Forwarded-For",
-            out Microsoft.Extensions.Primitives.StringValues ipAddress
+            out StringValues ipAddress
         );
         if (isForwardedForHeaderPresent)
             return ipAddress.ToString();
 
         ipAddress = HttpContext.Connection.RemoteIpAddress?.MapToIPv4().ToString();
         return ipAddress;
+    }
+
+    protected string? GetLocale()
+    {
+        bool queryHasLocale = Request.Query.TryGetValue("locale", out StringValues locale);
+        if (queryHasLocale)
+            return locale.ToString();
+
+        bool cookieHasLocale = Request.Cookies.TryGetValue("locale", out string? cookieLocale);
+        if (cookieHasLocale)
+            return cookieLocale;
+
+        IList<StringWithQualityHeaderValue> acceptLanguages = Request
+            .GetTypedHeaders()
+            .AcceptLanguage;
+        if (acceptLanguages.Count > 0)
+            return acceptLanguages
+                .OrderByDescending(x => x.Quality ?? 1)
+                .Select(x => x.Value.ToString())
+                .FirstOrDefault();
+
+        return null;
     }
 
     protected int GetUserIdFromRequest()
@@ -63,7 +87,7 @@ public class BaseController : ControllerBase
         CookieOptions cookieOptions = new()
         {
             Secure = true,
-            SameSite = SameSiteMode.Strict,
+            SameSite = Microsoft.AspNetCore.Http.SameSiteMode.Strict,
             Expires = DateTime.UtcNow.AddDays(_tokenOptions.RefreshTokenTTL),
         };
         Response.Cookies.Append(key: "refreshToken", refreshToken.Token, cookieOptions);

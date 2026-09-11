@@ -45,11 +45,12 @@ public class RegisterCommand : IRequest<RegisteredResponse>
 
             CreateUserDto createUser = mapper.Map<CreateUserDto>(request);
             User createdUser = await userService.CreateUser(createUser);
+            User addedUser = await userService.AddUser(createdUser);
 
-            AccessToken createdAccessToken = await authService.CreateAccessToken(createdUser);
+            AccessToken createdAccessToken = await authService.CreateAccessToken(addedUser);
 
             Domain.Entities.RefreshToken createdRefreshToken = await authService.CreateRefreshToken(
-                createdUser,
+                addedUser,
                 request.IpAddress
             );
             Domain.Entities.RefreshToken addedRefreshToken = await authService.AddRefreshToken(

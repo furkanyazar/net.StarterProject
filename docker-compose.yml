@@ -1,0 +1,21 @@
+services:
+  redis:
+    image: redis:8.0
+    ports:
+      - "6379:6379"
+
+  postgres:
+    image: postgres:16
+    environment:
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: Passw0rd!
+    ports:
+      - "5432:5432"
+
+  rabbitmq:
+    build:
+      context: .
+      dockerfile: dockerfile.rabbitmq
+    ports:
+      - "5672:5672"
+      - "15672:15672"
