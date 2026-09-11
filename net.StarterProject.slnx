@@ -38,4 +38,10 @@
         <Project Path="src/starterProject/Persistence/Persistence.csproj" />
         <Project Path="src/starterProject/WebAPI/WebAPI.csproj" />
     </Folder>
+    <Folder Name="/tests/">
+        <Project
+            Path="tests/Application.Tests/Application.Tests.csproj"
+            Id="e9958795-7cc2-437d-b011-44f1a857e745"
+        />
+    </Folder>
 </Solution>
