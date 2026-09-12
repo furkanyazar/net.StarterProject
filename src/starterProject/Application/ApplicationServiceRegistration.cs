@@ -13,6 +13,7 @@ using Core.CrossCuttingConcerns.Logging.Abstraction;
 using Core.CrossCuttingConcerns.Logging.Configurations;
 using Core.CrossCuttingConcerns.Logging.Serilog.File;
 using Core.ElasticSearch;
+using Core.ElasticSearch.Models;
 using Core.Localization.Resource.Yaml.DependencyInjection;
 using Core.Mailing;
 using Core.Mailing.MailKit;
@@ -28,7 +29,9 @@ public static class ApplicationServiceRegistration
     public static IServiceCollection AddApplicationServices(
         this IServiceCollection services,
         FileLogConfiguration fileLogConfiguration,
-        TokenOptions tokenOptions
+        TokenOptions tokenOptions,
+        MailSettings mailSettings,
+        ElasticSearchConfig elasticSearchConfig
     )
     {
         services.AddAutoMapper(
@@ -50,10 +53,14 @@ public static class ApplicationServiceRegistration
 
         services.AddValidatorsFromAssembly(Assembly.GetExecutingAssembly());
 
-        services.AddSingleton<IMailService, MailKitMailService>();
-        services.AddSingleton<IElasticSearch, ElasticSearchManager>();
+        services.AddSingleton<IMailService, MailKitMailService>(_ => new MailKitMailService(
+            mailSettings
+        ));
         services.AddSingleton<ILogger, SerilogFileLogger>(_ => new SerilogFileLogger(
             fileLogConfiguration
+        ));
+        services.AddSingleton<IElasticSearch, ElasticSearchManager>(_ => new ElasticSearchManager(
+            elasticSearchConfig
         ));
 
         services.AddSecurityServices<int, int, Guid>(tokenOptions);

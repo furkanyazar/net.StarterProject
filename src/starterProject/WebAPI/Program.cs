@@ -2,7 +2,9 @@ using Application;
 using Core.Application.Pipelines.Caching;
 using Core.CrossCuttingConcerns.Exception.WebApi.Extensions;
 using Core.CrossCuttingConcerns.Logging.Configurations;
+using Core.ElasticSearch.Models;
 using Core.Localization.WebApi;
+using Core.Mailing;
 using Core.Security.Encryption;
 using Core.Security.JWT;
 using Infrastructure;
@@ -37,11 +39,25 @@ WebAPIConfiguration webApiConfiguration =
     ?? throw new InvalidOperationException(
         $"\"{webApiConfigurationSection}\" section cannot found in configuration."
     );
+const string mailSettingsSection = "MailSettings";
+MailSettings mailSettings =
+    builder.Configuration.GetSection(mailSettingsSection).Get<MailSettings>()
+    ?? throw new InvalidOperationException(
+        $"\"{mailSettingsSection}\" section cannot found in configuration."
+    );
+const string elasticSearchConfigSection = "ElasticSearchConfig";
+ElasticSearchConfig elasticSearchConfig =
+    builder.Configuration.GetSection(elasticSearchConfigSection).Get<ElasticSearchConfig>()
+    ?? throw new InvalidOperationException(
+        $"\"{elasticSearchConfigSection}\" section cannot found in configuration."
+    );
 
 builder.Services.AddControllers();
 builder.Services.AddApplicationServices(
     fileLogConfiguration: fileLogConfiguration,
-    tokenOptions: tokenOptions
+    tokenOptions: tokenOptions,
+    mailSettings: mailSettings,
+    elasticSearchConfig: elasticSearchConfig
 );
 builder.Services.AddPersistenceServices(builder.Configuration);
 builder.Services.AddInfrastructureServices();
