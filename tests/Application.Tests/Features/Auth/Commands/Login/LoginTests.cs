@@ -9,7 +9,6 @@ using Application.Tests.Mocks.FakeDatas;
 using Application.Tests.Mocks.Repositories.Auth;
 using Core.CrossCuttingConcerns.Exception.Types;
 using Core.Security.JWT;
-using FluentValidation.Results;
 using FluentValidation.TestHelper;
 using Microsoft.Extensions.Configuration;
 using Moq;
