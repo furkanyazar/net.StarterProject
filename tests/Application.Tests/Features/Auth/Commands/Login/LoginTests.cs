@@ -7,17 +7,12 @@ using Application.Services.UserService;
 using Application.Tests.Mocks.Configurations;
 using Application.Tests.Mocks.FakeDatas;
 using Application.Tests.Mocks.Repositories.Auth;
-
 using Core.CrossCuttingConcerns.Exception.Types;
 using Core.Security.JWT;
-
 using FluentValidation.Results;
 using FluentValidation.TestHelper;
-
 using Microsoft.Extensions.Configuration;
-
 using Moq;
-
 using Xunit;
 
 namespace Application.Tests.Features.Auth.Commands.Login;
@@ -84,7 +79,9 @@ public class LoginTests : UserMockRepository
     {
         _command.Password = password;
         TestValidationResult<LoginCommand> result = _validator.TestValidate(_command);
-        result.ShouldHaveValidationErrorFor(x => x.Password).WithErrorCode(ErrorCodes.PasswordRequired);
+        result
+            .ShouldHaveValidationErrorFor(x => x.Password)
+            .WithErrorCode(ErrorCodes.PasswordRequired);
     }
 
     [Theory]
@@ -94,7 +91,9 @@ public class LoginTests : UserMockRepository
     {
         _command.Password = password;
         TestValidationResult<LoginCommand> result = _validator.TestValidate(_command);
-        result.ShouldHaveValidationErrorFor(x => x.Password).WithErrorCode(ErrorCodes.PasswordMinLength);
+        result
+            .ShouldHaveValidationErrorFor(x => x.Password)
+            .WithErrorCode(ErrorCodes.PasswordMinLength);
     }
 
     [Theory]
@@ -104,7 +103,9 @@ public class LoginTests : UserMockRepository
     {
         _command.Password = password;
         TestValidationResult<LoginCommand> result = _validator.TestValidate(_command);
-        result.ShouldHaveValidationErrorFor(x => x.Password).WithErrorCode(ErrorCodes.PasswordAtLeastLetter);
+        result
+            .ShouldHaveValidationErrorFor(x => x.Password)
+            .WithErrorCode(ErrorCodes.PasswordAtLeastLetter);
     }
 
     [Theory]
@@ -114,7 +115,9 @@ public class LoginTests : UserMockRepository
     {
         _command.Password = password;
         TestValidationResult<LoginCommand> result = _validator.TestValidate(_command);
-        result.ShouldHaveValidationErrorFor(x => x.Password).WithErrorCode(ErrorCodes.PasswordAtLeastDigit);
+        result
+            .ShouldHaveValidationErrorFor(x => x.Password)
+            .WithErrorCode(ErrorCodes.PasswordAtLeastDigit);
     }
 
     [Fact]
