@@ -19,7 +19,7 @@ public class EmailAuthenticatorFakeData : BaseFakeData<EmailAuthenticator, Guid>
                 UserId = 1,
                 ActivationKey = "test-active-key",
                 IsVerified = false,
-                ExpirationDate = DateTime.Now,
+                ExpirationDate = DateTime.UtcNow.AddMinutes(30),
                 CreatedDate = DateTime.UtcNow,
             },
             new()
@@ -37,7 +37,7 @@ public class EmailAuthenticatorFakeData : BaseFakeData<EmailAuthenticator, Guid>
                 UserId = 2,
                 ActivationKey = "test-not-exist-user-key",
                 IsVerified = false,
-                ExpirationDate = DateTime.Now,
+                ExpirationDate = DateTime.UtcNow.AddMinutes(30),
                 CreatedDate = DateTime.UtcNow,
             },
         ];
