@@ -1,8 +1,6 @@
 ﻿using Application.Features.Auth.Commands.RefreshToken;
-using Application.Features.Auth.Commands.ResetPassword;
 using Application.Services.AuthService;
 using Application.Services.MailQueueService;
-using Application.Services.Repositories;
 using Application.Services.UserService;
 using Application.Tests.Mocks.Configurations;
 using Application.Tests.Mocks.FakeDatas;
