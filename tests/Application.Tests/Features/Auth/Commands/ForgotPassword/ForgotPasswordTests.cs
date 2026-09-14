@@ -3,13 +3,11 @@ using Application.Features.Auth.Constants;
 using Application.Services.AuthenticatorService;
 using Application.Services.MailQueueService;
 using Application.Services.UserService;
-using Application.Tests.Mocks.Configurations;
 using Application.Tests.Mocks.FakeDatas;
 using Application.Tests.Mocks.Repositories.Auth;
 using Core.CrossCuttingConcerns.Exception.Types;
 using Core.Security.EmailAuthenticator;
 using FluentValidation.TestHelper;
-using Microsoft.Extensions.Configuration;
 using Moq;
 using Xunit;
 
@@ -29,8 +27,6 @@ public class ForgotPasswordTests : UserMockRepository
     )
         : base(userFakeData)
     {
-        IConfiguration configuration = MockConfiguration.GetConfigurationMock();
-
         Mock<IMailQueueService> mailQueueService = new();
         EmailAuthenticatorMockRepository emailAuthenticatorRepository = new(
             emailAuthenticatorFakeData

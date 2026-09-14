@@ -18,14 +18,18 @@ public class RefreshTokenTests : UserMockRepository
     private readonly RefreshTokenCommand _command;
     private readonly RefreshTokenCommand.RefreshTokenCommandHandler _handler;
 
-    public RefreshTokenTests(UserFakeData userFakeData, RefreshTokenFakeData refreshTokenFakeData, RefreshTokenCommand command)
+    public RefreshTokenTests(
+        UserFakeData userFakeData,
+        RefreshTokenFakeData refreshTokenFakeData,
+        RefreshTokenCommand command
+    )
         : base(userFakeData)
     {
         IConfiguration configuration = MockConfiguration.GetConfigurationMock();
 
         Mock<IMailQueueService> mailQueueService = new();
         TokenOptions tokenOptions = configuration.GetSection("TokenOptions").Get<TokenOptions>()!;
-        RefreshTokenMockRepository refreshTokenRepository = new RefreshTokenMockRepository(refreshTokenFakeData);
+        RefreshTokenMockRepository refreshTokenRepository = new(refreshTokenFakeData);
 
         ITokenHelper<int, int, Guid> tokenHelper = new JwtHelper<int, int, Guid>(tokenOptions);
         IUserService userService = new UserManager(MockRepository.Object, mailQueueService.Object);

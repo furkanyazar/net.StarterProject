@@ -14,7 +14,7 @@ using Microsoft.Extensions.Configuration;
 using Moq;
 using Xunit;
 
-namespace Application.Tests.Features.Auth.Commands.Login;
+namespace Application.Tests.Features.Auth.Commands.Register;
 
 public class RegisterTests : UserMockRepository
 {

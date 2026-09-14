@@ -15,7 +15,11 @@ public class RevokeTokenTests : UserMockRepository
     private readonly RevokeTokenCommand _command;
     private readonly RevokeTokenCommand.RevokeTokenCommandHandler _handler;
 
-    public RevokeTokenTests(UserFakeData userFakeData, RefreshTokenFakeData refreshTokenFakeData, RevokeTokenCommand command)
+    public RevokeTokenTests(
+        UserFakeData userFakeData,
+        RefreshTokenFakeData refreshTokenFakeData,
+        RevokeTokenCommand command
+    )
         : base(userFakeData)
     {
         IConfiguration configuration = MockConfiguration.GetConfigurationMock();
