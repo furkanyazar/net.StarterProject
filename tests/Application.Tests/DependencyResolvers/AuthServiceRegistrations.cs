@@ -1,4 +1,5 @@
 ﻿using Application.Features.Auth.Commands.Login;
+using Application.Features.Auth.Commands.Register;
 using Application.Tests.Mocks.FakeDatas;
 using Microsoft.Extensions.DependencyInjection;
 
@@ -11,5 +12,7 @@ public static class AuthServiceRegistrations
         services.AddTransient<UserFakeData>();
         services.AddTransient<LoginCommand>();
         services.AddTransient<LoginCommandValidator>();
+        services.AddTransient<RegisterCommand>();
+        services.AddTransient<RegisterCommandValidator>();
     }
 }
