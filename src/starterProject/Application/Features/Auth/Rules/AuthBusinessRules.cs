@@ -60,7 +60,7 @@ public class AuthBusinessRules(
 
     public async Task RefreshTokenShouldBeActiveWhenSelected(RefreshToken refreshToken)
     {
-        if (refreshToken.RevokedDate != null && DateTime.UtcNow >= refreshToken.ExpirationDate)
+        if (refreshToken.RevokedDate != null || DateTime.UtcNow >= refreshToken.ExpirationDate)
             throw new BusinessException(
                 await localizationService.GetLocalizedAsync(AuthMessages.RefreshTokenDoesNotActive)
             );

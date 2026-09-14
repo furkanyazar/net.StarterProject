@@ -2,7 +2,6 @@
 using Application.Features.Auth.Constants;
 using Application.Services.AuthenticatorService;
 using Application.Services.MailQueueService;
-using Application.Services.Repositories;
 using Application.Services.UserService;
 using Application.Tests.Mocks.Configurations;
 using Application.Tests.Mocks.FakeDatas;
