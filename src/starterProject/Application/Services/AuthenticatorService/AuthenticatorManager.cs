@@ -40,8 +40,9 @@ public class AuthenticatorManager(
         string activationKey
     )
     {
+        string key = HttpUtility.UrlDecode(activationKey, Encoding.UTF8);
         EmailAuthenticator? emailAuthenticator = await emailAuthenticatorRepository.GetAsync(ea =>
-            ea.ActivationKey == activationKey
+            ea.ActivationKey == key
         );
         return emailAuthenticator;
     }

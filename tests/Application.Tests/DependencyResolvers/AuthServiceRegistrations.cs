@@ -1,6 +1,7 @@
 ﻿using Application.Features.Auth.Commands.ForgotPassword;
 using Application.Features.Auth.Commands.Login;
 using Application.Features.Auth.Commands.Register;
+using Application.Features.Auth.Commands.ResetPassword;
 using Application.Tests.Mocks.FakeDatas;
 using Microsoft.Extensions.DependencyInjection;
 
@@ -21,5 +22,8 @@ public static class AuthServiceRegistrations
 
         services.AddTransient<ForgotPasswordCommand>();
         services.AddTransient<ForgotPasswordCommandValidator>();
+
+        services.AddTransient<ResetPasswordCommand>();
+        services.AddTransient<ResetPasswordCommandValidator>();
     }
 }

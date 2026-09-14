@@ -11,7 +11,36 @@ public class EmailAuthenticatorFakeData : BaseFakeData<EmailAuthenticator, Guid>
 {
     public override List<EmailAuthenticator> CreateFakeData()
     {
-        List<EmailAuthenticator> emailAuthenticators = [];
+        List<EmailAuthenticator> emailAuthenticators =
+        [
+            new()
+            {
+                Id = Guid.NewGuid(),
+                UserId = 1,
+                ActivationKey = "test-active-key",
+                IsVerified = false,
+                ExpirationDate = DateTime.Now,
+                CreatedDate = DateTime.UtcNow,
+            },
+            new()
+            {
+                Id = Guid.NewGuid(),
+                UserId = 1,
+                ActivationKey = "test-not-active-key",
+                IsVerified = true,
+                ExpirationDate = DateTime.UtcNow,
+                CreatedDate = DateTime.UtcNow,
+            },
+            new()
+            {
+                Id = Guid.NewGuid(),
+                UserId = 2,
+                ActivationKey = "test-not-exist-user-key",
+                IsVerified = false,
+                ExpirationDate = DateTime.Now,
+                CreatedDate = DateTime.UtcNow,
+            },
+        ];
 
         return emailAuthenticators;
     }
