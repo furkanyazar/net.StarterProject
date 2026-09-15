@@ -52,6 +52,8 @@ public class UserConfiguration : IEntityTypeConfiguration<User>
                 PasswordSalt = passwordSalt,
                 AuthenticatorType = AuthenticatorType.None,
                 UserGroupId = UserGroupConfiguration.AdminId,
+
+                CreatedDate = new DateTime(1, 1, 1, 0, 0, 0, DateTimeKind.Utc),
             };
             yield return adminUser;
         }

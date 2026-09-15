@@ -28,6 +28,7 @@ public class UserManager(IUserRepository userRepository, IMailQueueService mailQ
             Email = createUser.Email,
             PasswordHash = passwordHash,
             PasswordSalt = passwordSalt,
+            UserGroupId = 1,
         };
         return user;
     }

@@ -37,9 +37,10 @@ public class UserGroupOperationClaimConfiguration
         {
             yield return new()
             {
-                Id = Guid.NewGuid(),
+                Id = new Guid("2966927e-005b-482b-ad49-d4b8e7e7a43a"),
                 OperationClaimId = OperationClaimConfiguration.AdminId,
                 UserGroupId = UserGroupConfiguration.AdminId,
+                CreatedDate = new DateTime(1, 1, 1, 0, 0, 0, DateTimeKind.Utc),
             };
         }
     }
