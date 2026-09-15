@@ -6,5 +6,5 @@ using Persistence.Contexts;
 namespace Persistence.Repositories;
 
 public class UserGroupOperationClaimRepository(BaseDbContext context)
-    : EfRepositoryBase<UserGroupOperationClaim, int, BaseDbContext>(context),
+    : EfRepositoryBase<UserGroupOperationClaim, Guid, BaseDbContext>(context),
         IUserGroupOperationClaimRepository { }

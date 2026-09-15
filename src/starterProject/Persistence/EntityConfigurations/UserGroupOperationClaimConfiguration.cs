@@ -37,7 +37,7 @@ public class UserGroupOperationClaimConfiguration
         {
             yield return new()
             {
-                Id = 1,
+                Id = Guid.NewGuid(),
                 OperationClaimId = OperationClaimConfiguration.AdminId,
                 UserGroupId = UserGroupConfiguration.AdminId,
             };
