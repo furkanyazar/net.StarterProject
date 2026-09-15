@@ -29,14 +29,6 @@ public class OperationClaimConfiguration : IEntityTypeConfiguration<OperationCla
     public static int AdminId => 1;
     private static IEnumerable<OperationClaim> Seeds
     {
-        get
-        {
-            yield return new()
-            {
-                Id = AdminId,
-                Name = GeneralOperationClaims.Admin,
-                CreatedDate = new DateTime(1, 1, 1, 0, 0, 0, DateTimeKind.Utc),
-            };
-        }
+        get { yield return new() { Id = AdminId, Name = GeneralOperationClaims.Admin }; }
     }
 }

@@ -30,14 +30,6 @@ public class UserGroupConfiguration : IEntityTypeConfiguration<UserGroup>
     public static int AdminId => 1;
     private static IEnumerable<UserGroup> Seeds
     {
-        get
-        {
-            yield return new()
-            {
-                Id = AdminId,
-                Name = GeneralOperationClaims.Admin,
-                CreatedDate = new DateTime(1, 1, 1, 0, 0, 0, DateTimeKind.Utc),
-            };
-        }
+        get { yield return new() { Id = AdminId, Name = GeneralOperationClaims.Admin }; }
     }
 }
