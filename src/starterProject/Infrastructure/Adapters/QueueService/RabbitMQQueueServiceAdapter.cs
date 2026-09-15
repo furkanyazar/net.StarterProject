@@ -119,7 +119,7 @@ public class RabbitMQQueueServiceAdapter : QueueServiceBase
 
         if (!queueName.StartsWith(QueueNamePrefix))
         {
-            queueName = $"{QueueNamePrefix}{queueName}";
+            queueName = $"{QueueNamePrefix}.{queueName}";
         }
 
         await _channel.QueueDeclareAsync(
@@ -167,7 +167,7 @@ public class RabbitMQQueueServiceAdapter : QueueServiceBase
 
         if (!queueName.StartsWith(QueueNamePrefix))
         {
-            queueName = $"{QueueNamePrefix}{queueName}";
+            queueName = $"{QueueNamePrefix}.{queueName}";
         }
 
         await _channel.BasicPublishAsync(
@@ -192,7 +192,7 @@ public class RabbitMQQueueServiceAdapter : QueueServiceBase
     {
         if (!queueName.StartsWith(QueueNamePrefix))
         {
-            queueName = $"{QueueNamePrefix}{queueName}";
+            queueName = $"{QueueNamePrefix}.{queueName}";
         }
 
         if (enableOrdering)
@@ -333,7 +333,7 @@ public class RabbitMQQueueServiceAdapter : QueueServiceBase
     {
         if (!queueName.StartsWith(QueueNamePrefix))
         {
-            queueName = $"{QueueNamePrefix}{queueName}";
+            queueName = $"{QueueNamePrefix}.{queueName}";
         }
 
         await _channel.QueueDeleteAsync(queue: queueName, ifUnused: ifUnused, ifEmpty: ifEmpty);

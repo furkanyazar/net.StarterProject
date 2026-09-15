@@ -2,5 +2,5 @@
 
 public static class QueueNames
 {
-    public const string SendEmailQueue = "send-email-queue";
+    public const string SendEmailQueue = "send.email.queue";
 }
