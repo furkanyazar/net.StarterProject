@@ -57,7 +57,9 @@ public class RegisterTests : UserMockRepository
     {
         _command.Email = email;
         TestValidationResult<RegisterCommand> result = _validator.TestValidate(_command);
-        result.ShouldHaveValidationErrorFor(x => x.Email).WithErrorCode(AuthErrorCodes.EmailRequired);
+        result
+            .ShouldHaveValidationErrorFor(x => x.Email)
+            .WithErrorCode(AuthErrorCodes.EmailRequired);
     }
 
     [Theory]

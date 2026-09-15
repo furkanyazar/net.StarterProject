@@ -59,10 +59,6 @@ public class BaseController : ControllerBase
         if (queryHasLocale)
             return locale.ToString();
 
-        bool cookieHasLocale = Request.Cookies.TryGetValue("locale", out string? cookieLocale);
-        if (cookieHasLocale)
-            return cookieLocale;
-
         IList<StringWithQualityHeaderValue> acceptLanguages = Request
             .GetTypedHeaders()
             .AcceptLanguage;

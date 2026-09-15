@@ -53,7 +53,9 @@ public class ForgotPasswordTests : UserMockRepository
     {
         _command.Email = email;
         TestValidationResult<ForgotPasswordCommand> result = _validator.TestValidate(_command);
-        result.ShouldHaveValidationErrorFor(x => x.Email).WithErrorCode(AuthErrorCodes.EmailRequired);
+        result
+            .ShouldHaveValidationErrorFor(x => x.Email)
+            .WithErrorCode(AuthErrorCodes.EmailRequired);
     }
 
     [Theory]
