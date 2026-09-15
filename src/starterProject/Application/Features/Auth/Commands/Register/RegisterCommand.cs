@@ -29,6 +29,7 @@ public class RegisterCommand : IRequest<RegisteredResponse>
         Email = email;
         Password = password;
         IpAddress = ipAddress;
+        SendMailDto = sendMailDto;
     }
 
     public class RegisterCommandHandler(
