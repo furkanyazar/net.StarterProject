@@ -26,6 +26,21 @@ public class UserGroupOperationClaimConfiguration
         builder.HasOne(ugoc => ugoc.UserGroup);
         builder.HasOne(ugoc => ugoc.OperationClaim);
 
+        builder.HasData(Seeds);
+
         builder.HasBaseType((string)null!);
+    }
+
+    private static IEnumerable<UserGroupOperationClaim> Seeds
+    {
+        get
+        {
+            yield return new()
+            {
+                Id = 1,
+                OperationClaimId = OperationClaimConfiguration.AdminId,
+                UserGroupId = UserGroupConfiguration.AdminId,
+            };
+        }
     }
 }

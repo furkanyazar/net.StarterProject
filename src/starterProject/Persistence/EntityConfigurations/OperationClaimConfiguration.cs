@@ -1,4 +1,5 @@
-﻿using Domain.Entities;
+﻿using Core.Security.Constants;
+using Domain.Entities;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata.Builders;
 
@@ -20,6 +21,14 @@ public class OperationClaimConfiguration : IEntityTypeConfiguration<OperationCla
 
         builder.HasMany(oc => oc.UserGroupOperationClaims);
 
+        builder.HasData(Seeds);
+
         builder.HasBaseType((string)null!);
+    }
+
+    public static int AdminId => 1;
+    private static IEnumerable<OperationClaim> Seeds
+    {
+        get { yield return new() { Id = AdminId, Name = GeneralOperationClaims.Admin }; }
     }
 }

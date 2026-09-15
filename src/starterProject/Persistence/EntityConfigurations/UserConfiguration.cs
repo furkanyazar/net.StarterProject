@@ -1,4 +1,5 @@
 ﻿using Core.Security.Enums;
+using Core.Security.Hashing;
 using Domain.Entities;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata.Builders;
@@ -29,6 +30,30 @@ public class UserConfiguration : IEntityTypeConfiguration<User>
         builder.HasMany(u => u.RefreshTokens);
         builder.HasMany(u => u.EmailAuthenticators);
 
+        builder.HasData(Seeds);
+
         builder.HasBaseType((string)null!);
+    }
+
+    private static IEnumerable<User> Seeds
+    {
+        get
+        {
+            HashingHelper.CreatePasswordHash(
+                "Passw0rd!",
+                out byte[] passwordHash,
+                out byte[] passwordSalt
+            );
+            User adminUser = new()
+            {
+                Id = 1,
+                Email = "test@mail.com",
+                PasswordHash = passwordHash,
+                PasswordSalt = passwordSalt,
+                AuthenticatorType = AuthenticatorType.None,
+                UserGroupId = UserGroupConfiguration.AdminId,
+            };
+            yield return adminUser;
+        }
     }
 }
