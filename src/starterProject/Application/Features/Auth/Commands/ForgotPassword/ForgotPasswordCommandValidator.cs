@@ -7,7 +7,7 @@ public class ForgotPasswordCommandValidator : AbstractValidator<ForgotPasswordCo
 {
     public ForgotPasswordCommandValidator()
     {
-        RuleFor(c => c.Email).NotEmpty().WithErrorCode(ErrorCodes.EmailRequired);
-        RuleFor(c => c.Email).EmailAddress().WithErrorCode(ErrorCodes.EmailType);
+        RuleFor(c => c.Email).NotEmpty().WithErrorCode(AuthErrorCodes.EmailRequired);
+        RuleFor(c => c.Email).EmailAddress().WithErrorCode(AuthErrorCodes.EmailType);
     }
 }

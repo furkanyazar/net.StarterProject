@@ -7,14 +7,14 @@ public class ResetPasswordCommandValidator : AbstractValidator<ResetPasswordComm
 {
     public ResetPasswordCommandValidator()
     {
-        RuleFor(c => c.Password).NotEmpty().WithErrorCode(ErrorCodes.PasswordRequired);
-        RuleFor(c => c.Password).MinimumLength(8).WithErrorCode(ErrorCodes.PasswordMinLength);
+        RuleFor(c => c.Password).NotEmpty().WithErrorCode(AuthErrorCodes.PasswordRequired);
+        RuleFor(c => c.Password).MinimumLength(8).WithErrorCode(AuthErrorCodes.PasswordMinLength);
         RuleFor(c => c.Password)
             .Must(HaveAtLeastOneLetter)
-            .WithErrorCode(ErrorCodes.PasswordAtLeastLetter);
+            .WithErrorCode(AuthErrorCodes.PasswordAtLeastLetter);
         RuleFor(c => c.Password)
             .Must(HaveAtLeastOneDigit)
-            .WithErrorCode(ErrorCodes.PasswordAtLeastDigit);
+            .WithErrorCode(AuthErrorCodes.PasswordAtLeastDigit);
     }
 
     private bool HaveAtLeastOneLetter(string? password)

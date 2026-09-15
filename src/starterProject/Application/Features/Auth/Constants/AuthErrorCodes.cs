@@ -1,6 +1,6 @@
 ﻿namespace Application.Features.Auth.Constants;
 
-public static class ErrorCodes
+public static class AuthErrorCodes
 {
     public const string EmailRequired = "Email.Required";
     public const string EmailType = "Email.Type";

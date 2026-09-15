@@ -57,7 +57,7 @@ public class RegisterTests : UserMockRepository
     {
         _command.Email = email;
         TestValidationResult<RegisterCommand> result = _validator.TestValidate(_command);
-        result.ShouldHaveValidationErrorFor(x => x.Email).WithErrorCode(ErrorCodes.EmailRequired);
+        result.ShouldHaveValidationErrorFor(x => x.Email).WithErrorCode(AuthErrorCodes.EmailRequired);
     }
 
     [Theory]
@@ -67,7 +67,7 @@ public class RegisterTests : UserMockRepository
     {
         _command.Email = email;
         TestValidationResult<RegisterCommand> result = _validator.TestValidate(_command);
-        result.ShouldHaveValidationErrorFor(x => x.Email).WithErrorCode(ErrorCodes.EmailType);
+        result.ShouldHaveValidationErrorFor(x => x.Email).WithErrorCode(AuthErrorCodes.EmailType);
     }
 
     [Theory]
@@ -80,7 +80,7 @@ public class RegisterTests : UserMockRepository
         TestValidationResult<RegisterCommand> result = _validator.TestValidate(_command);
         result
             .ShouldHaveValidationErrorFor(x => x.Password)
-            .WithErrorCode(ErrorCodes.PasswordRequired);
+            .WithErrorCode(AuthErrorCodes.PasswordRequired);
     }
 
     [Theory]
@@ -92,7 +92,7 @@ public class RegisterTests : UserMockRepository
         TestValidationResult<RegisterCommand> result = _validator.TestValidate(_command);
         result
             .ShouldHaveValidationErrorFor(x => x.Password)
-            .WithErrorCode(ErrorCodes.PasswordMinLength);
+            .WithErrorCode(AuthErrorCodes.PasswordMinLength);
     }
 
     [Theory]
@@ -104,7 +104,7 @@ public class RegisterTests : UserMockRepository
         TestValidationResult<RegisterCommand> result = _validator.TestValidate(_command);
         result
             .ShouldHaveValidationErrorFor(x => x.Password)
-            .WithErrorCode(ErrorCodes.PasswordAtLeastLetter);
+            .WithErrorCode(AuthErrorCodes.PasswordAtLeastLetter);
     }
 
     [Theory]
@@ -116,7 +116,7 @@ public class RegisterTests : UserMockRepository
         TestValidationResult<RegisterCommand> result = _validator.TestValidate(_command);
         result
             .ShouldHaveValidationErrorFor(x => x.Password)
-            .WithErrorCode(ErrorCodes.PasswordAtLeastDigit);
+            .WithErrorCode(AuthErrorCodes.PasswordAtLeastDigit);
     }
 
     [Fact]

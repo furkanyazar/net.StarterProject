@@ -71,7 +71,7 @@ public class ResetPasswordTests : UserMockRepository
         TestValidationResult<ResetPasswordCommand> result = _validator.TestValidate(_command);
         result
             .ShouldHaveValidationErrorFor(x => x.Password)
-            .WithErrorCode(ErrorCodes.PasswordRequired);
+            .WithErrorCode(AuthErrorCodes.PasswordRequired);
     }
 
     [Theory]
@@ -83,7 +83,7 @@ public class ResetPasswordTests : UserMockRepository
         TestValidationResult<ResetPasswordCommand> result = _validator.TestValidate(_command);
         result
             .ShouldHaveValidationErrorFor(x => x.Password)
-            .WithErrorCode(ErrorCodes.PasswordMinLength);
+            .WithErrorCode(AuthErrorCodes.PasswordMinLength);
     }
 
     [Theory]
@@ -95,7 +95,7 @@ public class ResetPasswordTests : UserMockRepository
         TestValidationResult<ResetPasswordCommand> result = _validator.TestValidate(_command);
         result
             .ShouldHaveValidationErrorFor(x => x.Password)
-            .WithErrorCode(ErrorCodes.PasswordAtLeastLetter);
+            .WithErrorCode(AuthErrorCodes.PasswordAtLeastLetter);
     }
 
     [Theory]
@@ -107,7 +107,7 @@ public class ResetPasswordTests : UserMockRepository
         TestValidationResult<ResetPasswordCommand> result = _validator.TestValidate(_command);
         result
             .ShouldHaveValidationErrorFor(x => x.Password)
-            .WithErrorCode(ErrorCodes.PasswordAtLeastDigit);
+            .WithErrorCode(AuthErrorCodes.PasswordAtLeastDigit);
     }
 
     [Fact]
